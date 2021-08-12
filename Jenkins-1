@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git credentialsId: 'javahome2', url: ''
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+        stage('deploy-dev') {
+            steps {
+                sshagent(['tomcate-new']){
+                ssh """
+                     scp -oStrictHostKeyChecking*no target/myweb.war ec2-user ipaddress:home/ec2user/appachi/webapps
+                     ssh ec2-user ipaddress:home/ec2user/appachi/bin/shutdown.sh
+                     ssh ec2-user ipaddress:home/ec2user/appachi/bin/startup.sh
+                }
+            }
+        }
+    }
+}
