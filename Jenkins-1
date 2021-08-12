@@ -19,6 +19,8 @@ pipeline {
                      scp -oStrictHostKeyChecking*no target/myweb.war ec2-user ipaddress:home/ec2user/appachi/webapps
                      ssh ec2-user ipaddress:home/ec2user/appachi/bin/shutdown.sh
                      ssh ec2-user ipaddress:home/ec2user/appachi/bin/startup.sh
+                     
+                    """
                 }
             }
         }
